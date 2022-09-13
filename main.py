@@ -1,3 +1,4 @@
+#User replies
 good_greetings = [
   "good",
   "great",
@@ -71,9 +72,28 @@ color = [
   'white'
 ]
 
+#Age function
+def myAge(age):
+  if age <15:
+    print("Oh wow! You are quite young! What month were you born in?")        
+  elif age >= 15 and age < 20:
+    print("Nice! You are older than me! What month were you born in?")
+  elif age >= 20 and age < 55:
+    print("Cool! You are an adult. What month were you born in?")
+  elif age >= 55 and age<120:
+    print("That is interesting to know! What month were you born in?")
+  else:
+    print("You can't be that old. Try again.")
+    age_conformation = float(input("What is your age?\n"))
+    if age_conformation < 120:
+      print("Okay! That's more of a believable age. What month were you born in?")
+    else:
+      print('Whatever! What month were you born in?')
+
+#Long variable bot replies
 story_until_joke = " So, I was walking down to my friend's house earlier today when I saw a little sign with the most hilarious Knock-knock joke I have ever heard. So the Knock-knock joke was... oh, wait! Why would I tell you when I could show you! \nKnock knock!"
 
-story_until_age = " I was about to knock on the door, when I saw a banner saying Happy Birthday through the window. I was really surprised because I thought my friend's brithday was in August, but I guess I just got the information wrong. By the way, what month were you born in?"
+story_until_age = " I was about to knock on the door, when I saw a banner saying Happy Birthday through the window. I was really surprised because I thought my friend's brithday was in August, but I guess I just got the information wrong. By the way..."
 
 story_until_color = " Back to the story... Because I didn't want to disappoint my friend, I went and bought him a cake. It was dark blue, his favorite color. Personally, I like green, but dark blue is a close second. What color do you like?"
 
@@ -81,6 +101,7 @@ story_interruption = " Sorry I keep interrupting myself and taking up all your t
 
 story_end = "Ok, I'll finish this story for real this time. So I went back to my friend's house with the cake, but when I knocked on the door, my both my friend and I yelled happy birthday! Then it suddenly hit me, all the decorations were for me! Today was my birthday! I quickly explained the whole story to my friend, and we shared a good laugh over it. After we calmed down, we cut the cake that I bought, and shared it with our neighbors. Although it was surprising, I had a really awesome day today! What do you - Oh no, how did the time fly by so fast! I think I have to go now! Is it okay if I head to dinner?"
 
+#Main database
 bot_database = [
   {"context": "", "reply": good_greetings, "answer": "That's great!" + '\n'+ 'I had a very interesting day, would you like to hear about it?', "new_context": "story"},
   {"context": "", "reply": bad_greetings, "answer": "I hope you feel better soon!" + '\n'+ "I have a funny story, would you like to hear about it? I am sure it will cheer you up!", "new_context": "story"},
@@ -95,8 +116,8 @@ bot_database = [
 
   {"context": "joke", "reply": "who's there", "answer": "Broken pencil!", "new_context": "joke"},
   {"context": "joke", "reply": "broken pencil who", "answer": "Nevermind, it's pointless!\nWell, did you like it? It sure cheered me up.", "new_context": "joke_2"},
-  {"context": "joke_2", "reply": yes, "answer": "I knew you would! Anyway, back to the story..." + story_until_age, "new_context": "month"},
-  {"context": "joke_2", "reply": no, "answer": "Oh come on, I know you liked it! Anyway, back to the story..." + story_until_age, "new_context": "month"},
+  {"context": "joke_2", "reply": yes, "answer": "I knew you would! Anyway, back to the story..." + story_until_age, "new_context": "myAge"},
+  {"context": "joke_2", "reply": no, "answer": "Oh come on, I know you liked it! Anyway, back to the story..." + story_until_age, "new_context": "myAge"},
 
   {"context": "month", "reply": month, "answer": "Cool! That is good to know." + story_until_color, "new_context": "color"},
 
@@ -109,10 +130,17 @@ bot_database = [
   
 ]
 
+#Actual code
 print('Hello! How are you doing?')
 context = ''
 question=''
 while question != 'bye' and question != 'Bye' and question != 'Bye!' and question != 'bye!':
+  
+  if context == 'myAge':
+    age = float(input('How old are you?\n'))
+    myAge(age)
+    context = 'month'
+  
   question = input("")
   question = question.lower()
   got_answer = False
@@ -128,6 +156,8 @@ while question != 'bye' and question != 'Bye' and question != 'Bye!' and questio
           got_answer = True
           context = el["new_context"]
           break
+        
+#Errors with user replies
   if question != 'bye' and question != 'Bye' and question != 'Bye!' and question != 'bye!':
     if context == "joke" and got_answer  == False:
         print("Seriously!? You don't know how a Knock-knock joke works? You are killing me here! Okay, okay. I'll explain it to you.\nIf I say Knock knock\nYou say Who's there\nThen I say a word like, I don't know, Cow\nThen you say Cow who\nAnd then I will tell you the punch line\nYou got it? That was a rhetorical question by the way.")
@@ -135,5 +165,7 @@ while question != 'bye' and question != 'Bye' and question != 'Bye!' and questio
         print("Oh yeah! I like that color is pretty nice! What about your favroite convential color? This along the line of the colors of the rainbow.")
     if context == "story_restart" and got_answer  == False:
         print("Just say ok!")
-    elif not got_answer:
+    if context == 'myAge' and got_answer  == False:
+      continue
+    elif not got_answer and context != 'myAge':
         print("Sorry, I couldn't quite catch that. Could please you say it again?")
